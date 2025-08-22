@@ -83,6 +83,15 @@ DATABASES = {
         'PORT': '3307',
     }
 }
+import dj_database_url
+from decouple import config
+import os
+
+DATABASES = {
+    "default": dj_database_url.config(
+        default=os.getenv("DATABASE_URL", "sqlite:///db.sqlite3")
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
