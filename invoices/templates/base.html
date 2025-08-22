@@ -1,0 +1,177 @@
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}My Django Invoice App{% endblock %}</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/custom-style.css' %}" />
+
+  <style>
+    
+    /* Gradient background for navbar */
+    .bg-gradient {
+      background: linear-gradient(90deg, #2563eb, #1e40af);
+    }
+
+    /* Default nav link styles */
+    .navbar-dark .navbar-nav .nav-link,
+    .navbar-dark .navbar-nav .dropdown-item {
+      color: #fbbf24; /* Yellow color */
+      background-color: transparent;
+      text-shadow: none;
+      transition: color 0.3s, 
+      
+    }
+
+    /* Hover and focus effect */
+    .navbar-dark .navbar-nav .nav-link:hover,
+    .navbar-dark .navbar-nav .dropdown-item:hover,
+    .navbar-dark .navbar-nav .nav-link:focus,
+    .navbar-dark .navbar-nav .dropdown-item:focus {
+      color: #fbbf24;
+      background-color: ;
+      text-shadow: 0 0 10px rgba(251, 191, 36, 0.9);
+      outline: none;padding:20px;
+    }
+
+    /* Active nav link style */
+    .navbar-dark .navbar-nav .nav-link.active {
+      color: #fbbf24;
+      font-weight: 700;
+      text-shadow: 0 0 12px rgba(251, 191, 36, 1);
+      background-color:;padding:25px;
+    }
+
+    /* Brand logo drop shadow */
+    .navbar-brand img {
+      filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.4));
+    }
+
+    /* Logout button and search button styles */
+    .btn-outline-light {
+      border-width: 2px;
+      background-color: #fbbf24;
+      color: #1e40af;
+      transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    }
+
+    .btn-outline-light:hover,
+    .btn-outline-light:focus {
+      background-color: #d1a20b;
+      color: #1e40af;
+      box-shadow: 0 0 12px #d1a20b;
+      outline: none;
+    }
+
+    /* Search input width and shape */
+    .form-control-sm.rounded-pill {
+      max-width: 250px;
+    }
+
+    /* Dropdown menu item colors */
+    .dropdown-menu li a {
+      color: black;
+    }
+    .dropdown-menu li a:hover,
+    .dropdown-menu li a:focus {
+      color: #fbbf24;
+      background-color: rgba(251, 191, 36, 0.2);
+      text-shadow: 0 0 5px rgba(251, 191, 36, 0.7);
+    }
+    .bg-gradient {
+  background-color: #0b2e6a; /* Dark blue */
+}
+.login h5{
+  color: #fbbf24;
+  font-weight:bold;
+ padding-left:80px;
+
+}
+.navbar-brand{
+  padding-left:-35px;
+  font-weight:160px;
+}
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-gradient shadow-lg sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center fw-bold fs-4" href="{% url 'dashboard' %}">
+        {% comment %} <img src="{% static 'images/logo.svg' %}" alt="InvoiceApp Logo" width="40" height="40" class="me-2" /> {% endcomment %}
+        InvoiceApp
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 fw-semibold align-items-center">
+          <li class="nav-item mx-2">
+            <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">Dashboard</a>
+          </li>
+
+          <li class="nav-item dropdown mx-2">
+            <a class="nav-link dropdown-toggle" href="#" id="invoiceDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Invoices
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="invoiceDropdown">
+              <li><a class="dropdown-item" href="{% url 'create_invoice' %}">Create New Invoice</a></li>
+              <li><a class="dropdown-item" href="{% url 'invoice_history' %}">Invoice History</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item mx-2">
+            <a class="nav-link {% if request.resolver_match.url_name == 'add_product' %}active{% endif %}" href="{% url 'add_product' %}">Products</a>
+          </li>
+        </ul>
+
+        <form class="d-flex me-3" role="search" method="get" action="{% url 'search_invoices' %}">
+          <input class="form-control form-control-sm rounded-pill me-2" type="search" placeholder="Search invoices" aria-label="Search" name="q" />
+          <button class="btn btn-outline-light btn-sm rounded-pill px-3" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </form>
+
+        {% comment %} <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{% static 'images/user-avatar.png' %}" alt="User Avatar" width="35" height="35" class="rounded-circle me-2" />
+              {{ user.first_name }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+          </li>
+        </ul> {% endcomment %}
+        
+<div class="login">
+<h5>
+  Login
+</h5>
+</div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container mt-4 mb-5">
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

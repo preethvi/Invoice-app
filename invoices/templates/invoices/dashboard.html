@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+
+  <!-- Hero / Header -->
+  <div class="bg-primary text-white p-4 rounded mb-5 shadow-sm">
+    <h1 class="display-4 fw-bold">Enterprize</h1>
+    <p class="lead">Welcome back! Manage your invoices and products here.</p>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Recent Invoices Card -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm rounded">
+        <div class="card-header bg-secondary text-white">
+          <h3 class="mb-0">Recent Invoices</h3>
+        </div>
+        <div class="card-body p-0">
+          <table class="table mb-0 table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th scope="col">Invoice ID</th>
+                <th scope="col">Client</th>
+                <th scope="col">Date</th>
+                <th scope="col" class="text-end">Total</th>
+                <th scope="col" class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for invoice in invoices %}
+              <tr>
+                <td>#{{ invoice.id }}</td>
+                <td>{{ invoice.client.name }}</td>
+                <td>{{ invoice.date }}</td>
+                <td class="text-end">${{ invoice.total }}</td>
+                <td class="text-center">
+                  <a href="{% url 'invoice_detail' invoice.id %}" title="View Details" class="btn btn-sm btn-primary me-1">
+                    <i class="bi bi-eye"></i>
+                  </a>
+                  <a href="{% url 'download_invoice_pdf' invoice.id %}" title="Download PDF" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" class="text-center py-3">No invoices found.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer text-end">
+          <a href="{% url 'create_invoice' %}" class="btn btn-success btn-lg shadow-sm">
+            <i class="bi bi-plus-circle"></i> Create New Invoice
+          </a>
+        </div>
+      </div>
+    </div> <!-- End Recent Invoices -->
+
+    <!-- Products Card -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm rounded">
+        <div class="card-header bg-secondary text-white">
+          <h3 class="mb-0">Products</h3>
+        </div>
+        <div class="card-body">
+          <ul class="list-group list-group-flush">
+            {% for product in products %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <strong>{{ product.name }}</strong>
+                <small class="text-muted ms-2">({{ product.product_id }})</small>
+              </div>
+              <span class="badge bg-primary rounded-pill fs-6">${{ product.price }}</span>
+            </li>
+            {% empty %}
+            <li class="list-group-item text-center">No products available.</li>
+            {% endfor %}
+          </ul>
+          <div class="d-grid mt-3">
+            <a href="{% url 'add_product' %}" class="btn btn-info btn-lg shadow">
+              <i class="bi bi-cart-plus"></i> Add Product
+            </a>
+          </div>
+        </div>
+      </div>
+    </div> <!-- End Products -->
+
+  </div> <!-- End row -->
+
+</div> <!-- End container -->
+
+<!-- Include Bootstrap Icons CDN for icons (Add in your base.html head) -->
+{% endblock %}

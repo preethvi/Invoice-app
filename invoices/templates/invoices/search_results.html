@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  .search-results {
+    max-width: 700px;
+    margin: 1.5rem auto;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    padding: 2rem 3rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #212529;
+  }
+
+  .search-results h2 {
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #0d6efd;
+    border-bottom: 2px solid #0d6efd;
+    padding-bottom: 0.5rem;
+  }
+
+  .search-results ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+
+  .search-results ul li {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #dee2e6;
+    transition: background-color 0.25s ease;
+  }
+
+  .search-results ul li:last-child {
+    border-bottom: none;
+  }
+
+  .search-results ul li a {
+    text-decoration: none;
+    color: #0d6efd;
+    font-weight: 600;
+  }
+
+  .search-results ul li a:hover {
+    text-decoration: underline;
+    color: #094abe;
+  }
+
+  .search-results p {
+    font-style: italic;
+    color: #6c757d;
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 1.125rem;
+  }
+</style>
+
+<div class="search-results">
+  <h2>Search Results for "{{ query }}"</h2>
+  {% if invoices %}
+    <ul>
+      {% for invoice in invoices %}
+        <li><a href="{% url 'invoice_detail' invoice.id %}">Invoice #{{ invoice.id }} - {{ invoice.client.name }}</a></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No results found.</p>
+  {% endif %}
+</div>
+{% endblock %}
